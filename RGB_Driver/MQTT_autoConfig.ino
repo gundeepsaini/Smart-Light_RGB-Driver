@@ -19,18 +19,18 @@ const char* mqtt_user 		  = SECRET_MQTT_User;
 const char* mqtt_password 	= SECRET_MQTT_Pass;
 
 
-#define MQTT_TOPIC_STATE_LIGHT        "homeassistant/light/RGBdriver/Light/state"
-#define MQTT_TOPIC_CMD_LIGHT          "homeassistant/light/RGBdriver/Light/cmd"
-#define MQTT_TOPIC_STATE_BRIGHTNESS   "homeassistant/light/RGBdriver/Brightness/state"
-#define MQTT_TOPIC_CMD_BRIGHTNESS     "homeassistant/light/RGBdriver/Brightness/cmd"
-#define MQTT_TOPIC_STATE_COLOR        "homeassistant/light/RGBdriver/Color/state"
-#define MQTT_TOPIC_CMD_COLOR          "homeassistant/light/RGBdriver/Color/cmd"
+#define MQTT_TOPIC_STATE_LIGHT        "HA/RGBdriver/Light/state"
+#define MQTT_TOPIC_CMD_LIGHT          "HA/RGBdriver/Light/cmd"
+#define MQTT_TOPIC_STATE_BRIGHTNESS   "HA/RGBdriver/Brightness/state"
+#define MQTT_TOPIC_CMD_BRIGHTNESS     "HA/RGBdriver/Brightness/cmd"
+#define MQTT_TOPIC_STATE_COLOR        "HA/RGBdriver/Color/state"
+#define MQTT_TOPIC_CMD_COLOR          "HA/RGBdriver/Color/cmd"
 
 #define LIGHT_ON    "ON"
 #define LIGHT_OFF   "OFF"
 
 // Will Topic - Availability
-#define MQTT_TOPIC_WILL       "homeassistant/light/RGBdriver/Light/status"     
+#define MQTT_TOPIC_WILL       "HA/RGBdriver/status"     
 #define MQTT_OFFLINE          "Offline"
 #define MQTT_ONLINE           "Active"
 
@@ -82,6 +82,8 @@ void MQTT_reconnect()
         client.subscribe(MQTT_TOPIC_CMD_LIGHT);
         client.subscribe(MQTT_TOPIC_CMD_BRIGHTNESS);
         client.subscribe(MQTT_TOPIC_CMD_COLOR);
+
+        client.publish(MQTT_TOPIC_WILL, MQTT_ONLINE, true);
 
         if(SERIALCOM)
             Serial.println("MQTT connected");
