@@ -60,6 +60,8 @@ void MQTT_loop()
 void MQTT_publish()
 {   
   MQTT_publish_RGB_State();
+  MQTT_publish_RGB_Brightness();
+  MQTT_publish_RGB_Color(Current_RGB);
 }
 
 
