@@ -113,6 +113,16 @@ void MQTT_MessageRecd_callback(char* p_topic, byte* p_payload, unsigned int p_le
     else 
       if (payload.equals(String(LIGHT_OFF))) 
         Set_RGB_Driver_Mode(0, Current_RGB);
+
+    // Only for debugging light intensity
+    if (payload.equals("A000")) 
+      RGB_Test_Full_Intensity0();  
+    if (payload.equals("A001")) 
+      RGB_Test_Full_Intensity1();  
+    if (payload.equals("A002")) 
+      RGB_Test_Full_Intensity2();  
+    if (payload.equals("A003")) 
+      RGB_Test_Full_Intensity3();  
   } 
 
   else 

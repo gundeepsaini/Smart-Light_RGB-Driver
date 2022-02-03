@@ -22,6 +22,12 @@ void RGB_Init()
 }
 
 
+
+
+
+
+
+
 void Set_RGB_Driver_Mode(int Mode, const CRGB& CMD_RGB)
 {
   Serial.print("Set_RGB - Mode/Intensity/R/G/B:");
@@ -51,9 +57,9 @@ void Set_RGB_Driver_Mode(int Mode, const CRGB& CMD_RGB)
     case 1: // Custom color mode - rgb cmd        
         RGB_Driver_State = 1;
         
-        New_RGB.r = CMD_RGB.r * Intensity/100;
-        New_RGB.g = CMD_RGB.g * Intensity/100;
-        New_RGB.b = CMD_RGB.b * Intensity/100;
+        New_RGB.r = CMD_RGB.r ;
+        New_RGB.g = CMD_RGB.g ;
+        New_RGB.b = CMD_RGB.b ;
 
         showAnalogRGB(New_RGB);
         Blynk.virtualWrite(V2, 1);
@@ -85,9 +91,10 @@ void Set_RGB_Driver_Mode(int Mode, const CRGB& CMD_RGB)
     case 100: // Intensity change
         if(RGB_Driver_State == 1)
         {
-          New_RGB.r = Current_RGB.r * Intensity/100;
-          New_RGB.g = Current_RGB.g * Intensity/100;
-          New_RGB.b = Current_RGB.b * Intensity/100;
+          
+          New_RGB.r = Current_RGB.r ;
+          New_RGB.g = Current_RGB.g ;
+          New_RGB.b = Current_RGB.b ;
           Set_RGB_Driver_Mode(1, New_RGB);
         }
         Blynk.virtualWrite(V1, Intensity);
@@ -129,10 +136,20 @@ void RGB_PinOrder_EEPROM_WRITE(char color, int value)
 
 void showAnalogRGB(const CRGB& rgb)
 {
+  // Intensity Adjustment
+  int Min_Intensity = 75; // LEDs don't turn on below this.
+
+  int intensity_calc = map(Intensity, 0, 100, Min_Intensity, 100);
+
+  int red   = rgb.r * intensity_calc/100;
+  int green = rgb.g * intensity_calc/100;
+  int blue  = rgb.b * intensity_calc/100;
+
+
   // Maped to ESP's 1023 PWM output & reversed circuit logic.
-  Red_Val    = map(rgb.r, 0,255,1023,0);
-  Green_Val  = map(rgb.g, 0,255,1023,0);
-  Blue_Val   = map(rgb.b, 0,255,1023,0);
+  Red_Val    = map(red, 0,255,1023,0);
+  Green_Val  = map(green, 0,255,1023,0);
+  Blue_Val   = map(blue, 0,255,1023,0);
 
   analogWrite(RGB_Pins[R_Order-1], Red_Val);
   analogWrite(RGB_Pins[G_Order-1], Green_Val);
@@ -163,4 +180,38 @@ void colorBars_Test()
   showAnalogRGB( CRGB::Black ); delay(1000);
 }
 
+
+
+
+
+void RGB_Test_Full_Intensity0()
+{
+  digitalWrite(RGB_Pins[R_Order-1], HIGH);
+  digitalWrite(RGB_Pins[G_Order-1], HIGH);
+  digitalWrite(RGB_Pins[B_Order-1], HIGH);  
+}
+
+
+void RGB_Test_Full_Intensity1()
+{
+  digitalWrite(RGB_Pins[R_Order-1], LOW);
+  digitalWrite(RGB_Pins[G_Order-1], HIGH);
+  digitalWrite(RGB_Pins[B_Order-1], HIGH);  
+}
+
+
+void RGB_Test_Full_Intensity2()
+{
+  digitalWrite(RGB_Pins[R_Order-1], HIGH);
+  digitalWrite(RGB_Pins[G_Order-1], LOW);
+  digitalWrite(RGB_Pins[B_Order-1], HIGH);  
+}
+
+
+void RGB_Test_Full_Intensity3()
+{
+  digitalWrite(RGB_Pins[R_Order-1], HIGH);
+  digitalWrite(RGB_Pins[G_Order-1], HIGH);
+  digitalWrite(RGB_Pins[B_Order-1], LOW);  
+}
 
