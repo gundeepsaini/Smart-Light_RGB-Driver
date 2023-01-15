@@ -10,7 +10,7 @@ void Always_loop()
 
 void Fast_Loop()
 {   
-  Blynk.run();
+  //Blynk.run();
   server.handleClient();
   MQTT_loop();
 }

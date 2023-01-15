@@ -108,7 +108,7 @@ void setup()
     
   //RGB_PinOrder_EEPROM_READ();
   RGB_Init();
-  Blynk_Config();
+  //Blynk_Config();
   OTA_Config();
   WebServer_Config();
   MQTT_config();
